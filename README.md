@@ -16,6 +16,9 @@ Features:
 6. Upon receiving correct string, server sends end signal to any workers still working and sends string to request client
 
 Team Members:
+
 Nick Quadros, Programmer
+
 Sunny Lee, Programmer
+
 Luke Wooten, Programmer
