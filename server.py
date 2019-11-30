@@ -1,5 +1,6 @@
 from socket import *
 import threading
+import hashlib
 
 serverPort = 21
 serverHost = ''
@@ -8,12 +9,16 @@ serverSocket.bind((serverHost, serverPort))
 serverSocket.listen(10)
 print('The server is waiting on clients...')
 workers = list()
+requester = 0
+passHash = 0
 
-def requestHandler():
-    pass
+def requestHandler(passHash, solved):
+    passHash = connectionSocket.recv(1024).decode()
 
-def workerHandler():
-    pass
+
+
+def workerHandler(connectionSocket, workers, passHash):
+    connectionSocket.send(passHash.encode())
 
 while True:
      connectionSocket, addr = serverSocket.accept()
@@ -25,10 +30,15 @@ while True:
      queryResponse = connectionSocket.recv(1024).decode()
 
      if queryResponse == "1":
-         requestHandler()
+         if requester == 0:
+             requestHandler(passHash, "no")
+         else:
+             connectionSocket.send("Currently handling a differnet request.".encode())
      elif queryResponse == "2":
-         workerHandler()
+         workerHandler(connectionSocket, workers, passHash)
          workers.append(connectionSocket)
+         thread = threading.Thread(target=workerHandler, args=(connectionSocket, workers, passHash), daemon=True)
+         thread.start()
      else:
          invalidMessage = ("Server did not recognize response.")
          connectionSocket.send(invalidMessage.encode())
