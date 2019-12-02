@@ -16,7 +16,6 @@ passHash = ""
 def requestHandler(solved):
     global passHash
     passHash = connectionSocket.recv(1024).decode()
-    print(passHash)
 
 def workerHandler(connectionSocket, workers):
     global passHash
@@ -24,7 +23,6 @@ def workerHandler(connectionSocket, workers):
         if requester == 1:
             connectionSocket.send(passHash.encode())
             if len(workers) == 1:
-                print(passHash)
                 parameters = "123456"
                 workers[0].send(parameters.encode())
                 break
