@@ -13,16 +13,19 @@ workerHandlers = list()
 requester = 0
 passHash = ""
 
-def requestHandler(passHash, solved):
+def requestHandler(solved):
+    global passHash
     passHash = connectionSocket.recv(1024).decode()
     print(passHash)
 
-def workerHandler(connectionSocket, workers, passHash):
+def workerHandler(connectionSocket, workers):
+    global passHash
     while True:
         if requester == 1:
+            connectionSocket.send(passHash.encode())
             if len(workers) == 1:
+                print(passHash)
                 parameters = "123456"
-                workers[0].send(passHash.encode())
                 workers[0].send(parameters.encode())
                 break
             elif len(workers) == 2:
@@ -75,6 +78,10 @@ def workerHandler(connectionSocket, workers, passHash):
                 parameters = "1"
                 workers[6].send(parameters.encode())
                 break
+            while True:
+                response = connectionSocket.recv(1024).decode()
+                if len(response) != 0:
+                    print(response)
 
 while True:
      connectionSocket, addr = serverSocket.accept()
@@ -85,7 +92,7 @@ while True:
      if queryResponse == "1":
          if requester == 0:
              print(addr, " Is a requester.")
-             requestHandler(passHash, "no")
+             requestHandler("no")
              requester = 1
          else:
              connectionSocket.send("Currently handling a differnet request.".encode())
@@ -98,7 +105,7 @@ while True:
          else: 
              print(addr, " Is a worker.")
              workers.append(connectionSocket)
-             thread = threading.Thread(target=workerHandler, args=(connectionSocket, workers, passHash,), daemon=True)
+             thread = threading.Thread(target=workerHandler, args=(connectionSocket, workers,), daemon=True)
              workerHandlers.append(thread)
              thread.start()
  
