@@ -2,10 +2,13 @@ from socket import *
 import threading
 import hashlib
 import time
+import sys
+import os
+
 
 serverPort = 21
 serverHost = ''
-serverSocket = socket(AF_INET,SOCK_STREAM)
+serverSocket = socket(AF_INET, SOCK_STREAM)
 serverSocket.bind((serverHost, serverPort))
 serverSocket.listen(10)
 print('The server is waiting on clients...')
@@ -17,10 +20,12 @@ passHash = ""
 hashs = list()
 hashs.append(passHash)
 
+
 def requestHandler(solved):
     global passHash
     passHash = (connectionSocket.recv(1024).decode())
     print(passHash)
+
 
 def workerHandler(connectionSocket, workers, requesters):
     try:
@@ -28,7 +33,7 @@ def workerHandler(connectionSocket, workers, requesters):
         while True:
             sendHash = ""
             if len(requesters) == 1:
-                if passHash is not "":
+                if passHash != "":
                     sendHash = passHash
                     connectionSocket.send(sendHash.encode())
                 if len(workers) == 1:
@@ -113,42 +118,50 @@ def workerHandler(connectionSocket, workers, requesters):
             if len(response) != 0:
                 response = ('Password found! ' + response)
                 print(response)
+                print('Succesful crack, server will restart in ten seconds.')
                 requesters[0].send(response.encode())
+                time.sleep(10)
+                os.execl(sys.executable, sys.executable, *sys.argv)
     except ConnectionResetError:
         print(addr, 'has discconected.')
-                        
+
+
 while True:
-     connectionSocket, addr = serverSocket.accept()
+    connectionSocket, addr = serverSocket.accept()
 
-     print('Connection recieved from: ', addr)
-     queryResponse = connectionSocket.recv(1024).decode()
+    print('Connection recieved from: ', addr)
+    queryResponse = connectionSocket.recv(1024).decode()
 
-     if queryResponse == "1":
-         if len(requesters) == 0:
-             print(addr, " Is a requester.")
-             requester = 1      
-             reqThread = threading.Thread(target= requestHandler, args=("no",), daemon=True)
-             reqThread.start()
-             requesters.append(connectionSocket)
-             
-         else:
-             requestOverflow = "Currently handling a differnet request, could not connect this request."
-             print(requestOverflow)
-             connectionSocket.send(requestOverflow.encode())
-             connectionSocket.close()
-     elif queryResponse == "2":
-         if len(workers) == 6:
-             maxMessage = "Worker overload, too many attempted connect, please restart server."
-             connectionSocket.send(maxMessage.encode())
-             print(maxMessage)
-             connectionSocket.close()
-         else: 
-             print(addr, " Is a worker.")
-             workers.append(connectionSocket)
-             workThread = threading.Thread(target=workerHandler, args=(connectionSocket, workers, requesters,), daemon=True)
-             workerHandlers.append(connectionSocket)
-             workThread.start()
- 
-     else:
-         invalidMessage = ("Server did not recognize response.")
-         connectionSocket.send(invalidMessage.encode())
+    if queryResponse == "1":
+
+        if len(requesters) == 0:
+            print(addr, " Is a requester.")
+            requester = 1
+            reqThread = threading.Thread(
+                target=requestHandler, args=("no",), daemon=True)
+            reqThread.start()
+            requesters.append(connectionSocket)
+        else:
+            requestOverflow = "Currently handling a differnet request, could not connect this request."
+            print(requestOverflow)
+            connectionSocket.send(requestOverflow.encode())
+            connectionSocket.close()
+
+    elif queryResponse == "2":
+        
+        if len(workers) == 6:
+            maxMessage = "Worker overload, too many attempted connect, please restart server."
+            connectionSocket.send(maxMessage.encode())
+            print(maxMessage)
+            connectionSocket.close()
+        else:
+            print(addr, " Is a worker.")
+            workers.append(connectionSocket)
+            workThread = threading.Thread(target=workerHandler, args=(
+                connectionSocket, workers, requesters,), daemon=True)
+            workerHandlers.append(connectionSocket)
+            workThread.start()
+
+    else:
+        invalidMessage = ("Server did not recognize response.")
+        connectionSocket.send(invalidMessage.encode())
