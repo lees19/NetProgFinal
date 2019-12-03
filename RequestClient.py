@@ -1,5 +1,6 @@
 from socket import*
 import hashlib
+import time
 
 socket = socket(AF_INET, SOCK_STREAM)
 serverName = 'localhost'
@@ -17,4 +18,6 @@ while True:
          data = socket.recv(1024)
          if len(data) != 0:
                  print(data.decode())
-print('\nFile succesfully recieved')
+                 print("Program will automatically close in ten seconds.")
+                 time.sleep(10)
+                 exit()

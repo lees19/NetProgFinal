@@ -2,6 +2,7 @@ from socket import *
 import itertools
 import string
 import hashlib
+import time
         
 # Uses parameters to generate strings within them and check for correct hash against provided hash
 def generator(numbers, hashed):
@@ -17,6 +18,9 @@ def generator(numbers, hashed):
                 success = 'The password is: ' + iteration
                 connectionSocket.send(success.encode())
                 print(success)
+                print("Thank you for contributing to the crack! The program will close in ten seconds.")
+                time.sleep(10)
+                exit()
                 break
         if done == 1:
             break
