@@ -1,6 +1,7 @@
 from socket import *
 import threading
 import hashlib
+import time
 
 serverPort = 21
 serverHost = ''
@@ -11,28 +12,39 @@ print('The server is waiting on clients...')
 workers = list()
 workerHandlers = list()
 requesters = list()
+requester = 0
 passHash = ""
+hashs = list()
+hashs.append(passHash)
 
 def requestHandler(solved):
     global passHash
-    passHash = connectionSocket.recv(1024).decode()
+    passHash = (connectionSocket.recv(1024).decode())
+    print(passHash)
+    while True:
+        print(2)
+        time.sleep(3)
 
-def workerHandler(connectionSocket, workers):
-    global requesters
+def workerHandler(connectionSocket, workers, requesters):
     global passHash
     while True:
+        print(1)
+        time.sleep(3)
+        sendHash = ""
         if len(requesters) == 1:
-            connectionSocket.send(passHash.encode())
+            if passHash is not "":
+                sendHash = passHash
+                connectionSocket.send(sendHash.encode())
             if len(workers) == 1:
                 parameters = "123456"
                 workers[0].send(parameters.encode())
-                break
+                if sendHash != "":
+                    break
             elif len(workers) == 2:
                 parameters = "16"
                 workers[0].send(parameters.encode())
                 parameters = "2345"
                 workers[1].send(parameters.encode())
-                break
             elif len(workers) == 3:
                 parameters = "6"
                 workers[0].send(parameters.encode())
@@ -40,7 +52,6 @@ def workerHandler(connectionSocket, workers):
                 workers[1].send(parameters.encode())
                 parameters = "234"
                 workers[2].send(parameters.encode())
-                break
             elif len(workers) == 4:
                 parameters = "6"
                 workers[0].send(parameters.encode())
@@ -50,7 +61,6 @@ def workerHandler(connectionSocket, workers):
                 workers[2].send(parameters.encode())
                 parameters = "23"
                 workers[3].send(parameters.encode())
-                break
             elif len(workers) == 5:
                 parameters = "6"
                 workers[0].send(parameters.encode())
@@ -62,7 +72,6 @@ def workerHandler(connectionSocket, workers):
                 workers[3].send(parameters.encode())
                 parameters = "12"
                 workers[4].send(parameters.encode())
-                break
             elif len(workers) == 6:
                 parameters = "6"
                 workers[0].send(parameters.encode())
@@ -76,17 +85,15 @@ def workerHandler(connectionSocket, workers):
                 workers[4].send(parameters.encode())
                 parameters = "1"
                 workers[6].send(parameters.encode())
-                break
-            while True:
-                response = connectionSocket.recv(1024).decode()
-                if len(response) != 0:
-                    print(response)
-                    if response == 'Failure to find password.':
-                         print (addr + 'Did not find the password.')
-                         connectionSocket.close()
-                    else:
-                        print('Password found!' + response)
-                        requesters[0].send(response.encode())
+    response = connectionSocket.recv(1024).decode()
+    if len(response) != 0:
+        print(response)
+        if response == 'Failure to find password.':
+            print (addr + 'Did not find the password.')
+            connectionSocket.close()
+        else:
+            print('Password found! ' + response)
+            requesters[0].send(response.encode())
                         
 while True:
      connectionSocket, addr = serverSocket.accept()
@@ -96,11 +103,12 @@ while True:
 
      if queryResponse == "1":
          if len(requesters) == 0:
-             print(connectionSocket.recv(1024).decode())
              print(addr, " Is a requester.")
+             requester = 1      
              reqThread = threading.Thread(target= requestHandler, args=("no",), daemon=True)
              reqThread.start()
              requesters.append(reqThread)
+             
          else:
              connectionSocket.send("Currently handling a differnet request.".encode())
              connectionSocket.close()
@@ -112,7 +120,7 @@ while True:
          else: 
              print(addr, " Is a worker.")
              workers.append(connectionSocket)
-             workThread = threading.Thread(target=workerHandler, args=(connectionSocket, workers,), daemon=True)
+             workThread = threading.Thread(target=workerHandler, args=(connectionSocket, workers, requesters,), daemon=True)
              workerHandlers.append(workThread)
              workThread.start()
  

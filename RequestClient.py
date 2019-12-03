@@ -12,8 +12,7 @@ socket.send(pswdHash.hexdigest().encode())
 
 print('File delivered to server.')
 print('receiving data...\n')
-data = socket.recv(1024)
-print(data.decode())
+
 while True:
          data = socket.recv(1024)
          if len(data) != 0:
