@@ -5,7 +5,7 @@ import hashlib
         
 # Uses parameters to generate strings within them and check for correct hash against provided hash
 def generator(numbers, hashed):
-    chars = string.ascii_lowercase + string.digits
+    chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
     iterator = 0
     done = 0
     while iterator <= len(numbers):
@@ -17,7 +17,6 @@ def generator(numbers, hashed):
                 success = 'The password is: ' + iteration
                 connectionSocket.send(success.encode())
                 print(success)
-                print("Thank you for contributing to the password crack! The program will close momentarily.")
                 break
         if done == 1:
             break
@@ -40,7 +39,11 @@ connectionSocket.connect((ip, port))
 connectionSocket.send(identifier.encode())
 
 # Main method
+print("Thank you for contributing to the password crack!")
+print("We will be borrowing some processing power before automatically closing this window.")
 parameters = connectionSocket.recv(1024).decode()
+if parameters == 'Number of workers at capacity, connection dropped.':
+    print(parameters)
 while True:
     hashed = connectionSocket.recv(1024).decode()
     if hashed != "" and len(hashed) > 6:
