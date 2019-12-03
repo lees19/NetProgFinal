@@ -1,7 +1,7 @@
 from socket import *
-import threading
 import itertools
 import string
+import hashlib
 
 # Sets up sockets / variables needed for connection
 connectionSocket = socket(AF_INET, SOCK_STREAM)
@@ -14,20 +14,45 @@ connectionSocket.send(identifier.encode())
 # Main method
 hashed = connectionSocket.recv(1024).decode()
 parameters = connectionSocket.recv(1024).decode()
-generator(parameters, hashed)
+rangeFinder(parameters, hashed)
 
-def generator(parameters, hashed):
+def rangeFinder(parameters, hashed):
+    numbers = list()
+
+    for character in parameters:
+        numbers.append(int(character))
+    generator(numbers, hashed)
+        
+
+def generator(numbers, hashed):
     chars = string.ascii_lowercase + string.digits
-
-    for password_length in range(1, 9):
-        for guess in itertools.product(chars, repeat = password_length):
-            guess = ''.join(guess)
+    iterator = 0
+    done = 0
+    while iterator <= len(numbers):
+        for guess in itertools.product(chars, repeat = numbers[iterator]):
+            iteration = (''.join(guess))
+            iterationHash = hashlib.md5(iteration.encode()).hexdigest()
+            if iterationHash == hashed:
+                done = 1
+                success = 'The password is: ' + iteration
+                connectionSocket.send(success.encode())
+                print(success)
+                print("Thank you for contributing to the password crack! The program will close momentarily.")
+                break
+        if done == 1:
+            break
+        iterator += 1
+    
+    for values in numbers:
+        for guess in itertools.product(chars, repeat = numbers[values]):
 
             if guess == hashed:
                 success = 'password is {}.'.format(guess)
                 connectionSocket.send(success.encode())
+                print (success)
                 print("Thank you for contributing to the password crack! The program will close momentarily")
             elif guess == range: 
-                failure = 'Password is not in this range'
+                failure = 'Failure to find password.'
                 connectionSocket.send(failure.encode())
+                print (failure)
                 print("Thank you for contributing to the password crack! The program will close momentarily.")

@@ -80,7 +80,12 @@ def workerHandler(connectionSocket, workers):
                 response = connectionSocket.recv(1024).decode()
                 if len(response) != 0:
                     print(response)
-
+                    if response == 'Failure to find password.':
+                         print (addr + 'Did not find the password.')
+                         connectionSocket.close()
+                    else:
+                        print('Password found!' + response)
+                        
 while True:
      connectionSocket, addr = serverSocket.accept()
 
@@ -89,6 +94,7 @@ while True:
 
      if queryResponse == "1":
          if requester == 0:
+             print(connectionSocket.recv(1024).decode())
              print(addr, " Is a requester.")
              requestHandler("no")
              requester = 1
