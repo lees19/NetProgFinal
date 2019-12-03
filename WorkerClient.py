@@ -14,8 +14,13 @@ connectionSocket.send(identifier.encode())
 # Main method
 hashed = connectionSocket.recv(1024).decode()
 parameters = connectionSocket.recv(1024).decode()
+print(hashed)
+print('Parameters are: ' + parameters)
+print('Correct hash is: ' + hashed)
+print("Working. . .")
 rangeFinder(parameters, hashed)
 
+# Converts string value of parameters into integers and puts in a list for the generator to use
 def rangeFinder(parameters, hashed):
     numbers = list()
 
@@ -23,7 +28,7 @@ def rangeFinder(parameters, hashed):
         numbers.append(int(character))
     generator(numbers, hashed)
         
-
+# Uses parameters to generate strings within them and check for correct hash against provided hash
 def generator(numbers, hashed):
     chars = string.ascii_lowercase + string.digits
     iterator = 0

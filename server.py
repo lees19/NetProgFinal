@@ -10,7 +10,7 @@ serverSocket.listen(10)
 print('The server is waiting on clients...')
 workers = list()
 workerHandlers = list()
-requester = 0
+requesters = list()
 passHash = ""
 
 def requestHandler(solved):
@@ -18,9 +18,10 @@ def requestHandler(solved):
     passHash = connectionSocket.recv(1024).decode()
 
 def workerHandler(connectionSocket, workers):
+    global requesters
     global passHash
     while True:
-        if requester == 1:
+        if len(requesters) == 1:
             connectionSocket.send(passHash.encode())
             if len(workers) == 1:
                 parameters = "123456"
@@ -85,6 +86,7 @@ def workerHandler(connectionSocket, workers):
                          connectionSocket.close()
                     else:
                         print('Password found!' + response)
+                        requesters[0].send(response.encode())
                         
 while True:
      connectionSocket, addr = serverSocket.accept()
@@ -93,11 +95,12 @@ while True:
      queryResponse = connectionSocket.recv(1024).decode()
 
      if queryResponse == "1":
-         if requester == 0:
+         if len(requesters) == 0:
              print(connectionSocket.recv(1024).decode())
              print(addr, " Is a requester.")
-             requestHandler("no")
-             requester = 1
+             reqThread = threading.Thread(target= requestHandler, args=("no",), daemon=True)
+             reqThread.start()
+             requesters.append(reqThread)
          else:
              connectionSocket.send("Currently handling a differnet request.".encode())
              connectionSocket.close()
@@ -109,9 +112,9 @@ while True:
          else: 
              print(addr, " Is a worker.")
              workers.append(connectionSocket)
-             thread = threading.Thread(target=workerHandler, args=(connectionSocket, workers,), daemon=True)
-             workerHandlers.append(thread)
-             thread.start()
+             workThread = threading.Thread(target=workerHandler, args=(connectionSocket, workers,), daemon=True)
+             workerHandlers.append(workThread)
+             workThread.start()
  
      else:
          invalidMessage = ("Server did not recognize response.")
