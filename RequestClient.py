@@ -13,7 +13,7 @@ socket.connect((serverName, port))
 socket.send("1".encode())
 while True:
     pswdHash = input('Enter the hash you want to crack (Six character max, no special characters): ')
-    if re.match("^[a-zA-Z0-9_]*$", pswdHash) and len(pswdHash) < 6 and len(pswdHash) >= 1:
+    if re.match("^[a-zA-Z0-9_]*$", pswdHash) and len(pswdHash) <= 6 and len(pswdHash) >= 1:
         pswdHash = hashlib.md5(pswdHash.encode())
         socket.send(pswdHash.hexdigest().encode())
         break

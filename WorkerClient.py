@@ -15,7 +15,6 @@ def generator(numbers, hashed):
         for guess in itertools.product(chars, repeat=numbers[iterator]):
             iteration = (''.join(guess))
             iterationHash = hashlib.md5(iteration.encode()).hexdigest()
-            print(iteration)
             if iterationHash == hashed:
                 done = 1
                 success = 'The password is: ' + iteration

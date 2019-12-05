@@ -37,16 +37,16 @@ def workerHandler(connectionSocket, workers, requesters):
                     sendHash = passHash
                     connectionSocket.send(sendHash.encode())
                 if len(workers) == 1:
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "123456"
                     workers[0].send(parameters.encode())
                     if sendHash != "":
                         break
                 elif len(workers) == 2:
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "16"
                     workers[0].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "2345"
                     workers[1].send(parameters.encode())
                     if sendHash != "":
@@ -54,10 +54,10 @@ def workerHandler(connectionSocket, workers, requesters):
                 elif len(workers) == 3:
                     parameters = "6"
                     workers[0].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "15"
                     workers[1].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "234"
                     workers[2].send(parameters.encode())
                     if sendHash != "":
@@ -65,13 +65,13 @@ def workerHandler(connectionSocket, workers, requesters):
                 elif len(workers) == 4:
                     parameters = "6"
                     workers[0].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "5"
                     workers[1].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "14"
                     workers[2].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "23"
                     workers[3].send(parameters.encode())
                     if sendHash != "":
@@ -79,16 +79,16 @@ def workerHandler(connectionSocket, workers, requesters):
                 elif len(workers) == 5:
                     parameters = "6"
                     workers[0].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "5"
                     workers[1].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "4"
                     workers[2].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "3"
                     workers[3].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "12"
                     workers[4].send(parameters.encode())
                     if sendHash != "":
@@ -96,19 +96,19 @@ def workerHandler(connectionSocket, workers, requesters):
                 elif len(workers) == 6:
                     parameters = "6"
                     workers[0].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "5"
                     workers[1].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "4"
                     workers[2].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "3"
                     workers[3].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "2"
                     workers[4].send(parameters.encode())
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                     parameters = "1"
                     workers[5].send(parameters.encode())
                     if sendHash != "":
