@@ -21,9 +21,9 @@ Demo Video:
 
 References:
 
-Torres, Andres. “Hashing Strings with Python.” Python Central, 13 Aug. 2013,www.pythoncentral.io/hashing-strings-with-python/.
+Torres, Andres. “Hashing Strings with Python.” Python Central, 13 Aug. 2013,www.pythoncentral.io/hashing-strings-with-  python/.
 
-Python Software Foundation. “1. Command Line and Environment¶.” 1. Command Line and Environment -	 Python 3.8.0 Documentation, 2019,										 docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED.
+Python Software Foundation. “1. Command Line and Environment¶.” 1. Command Line and Environment -	 Python 3.8.0   Documentation, 2019,										 docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED.
 
 Rohatgi, Shwetanshu. “Global and Local Variables in Python.” GeeksforGeeks, 6 Sept. 2018,			 www.geeksforgeeks.org/global-local-variables-python/.
 
