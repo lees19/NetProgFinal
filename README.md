@@ -2,6 +2,7 @@
 Network Programming Final
 
 Description:
+
 This project will implement a password cracker using a client-server architecture programmed on Python. The program will include a server, request clients and worker clients.
 
 Getting Started:
