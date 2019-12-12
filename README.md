@@ -18,7 +18,7 @@ Features:
 6. Upon receiving correct string, server sends end signal to any workers still working and sends string to request client.
 
 Demo Video:
-https://drive.google.com/file/d/1FuRtuocWO7aY19m1PBa-KsjadR46Q1Pe/view?usp=sharing
+https://youtu.be/8yMsHXsHlgc
 
 References:
 
