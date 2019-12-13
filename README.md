@@ -7,7 +7,19 @@ This project will implement a password cracker using a client-server architectur
 
 Getting Started:
 
-To install the project, download all files from the project github. Then, open the server, open how many worker clients you wish to run(maximum of six), and then open the request client in this order. You will then type in the desired password into the request client, and it will be returned to the request client from the worker clients. Upon completion, the program will close and the user will have to manually close the remaining worker clients. 
+Installation: 
+1) To install the project, download all files from the project github. 
+2) Make sure that the folders in the directory where you place the file have no spaces in their names, the server reset will not work if there are spaces in the directory.
+3) Ensure that you have Python 3 installed to run the file
+
+Running: 
+NOTE: Follow the steps in this order, as clients are meant to be run in a specific order
+1) Open the server by double clicking the file titled server.
+2) Open however many worker clients you wish to run (maximum of six) by double clicking the workerClient file
+3) Open the request client by double clicking on the requestClient file
+4) Type in the desired password into the request client and wait for the workers to crack the password
+5) Upon completion, the server, requester, and succesful worker will automatically close
+6) Manually close the remaining worker windows as they will continue to guess until they have completed their loops
 
 Features:
 1. A request client that connects to the server and sends a hash.
