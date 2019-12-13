@@ -13,6 +13,7 @@ Installation:
 3) Ensure that you have Python 3 installed to run the file
 
 Running:
+
 NOTE: Follow the steps in this order, as clients are meant to be run in a specific order
 1) Open the server by double clicking the file titled server.
 2) Open however many worker clients you wish to run (maximum of six) by double clicking the workerClient file
